@@ -1,70 +1,70 @@
 @import "tailwindcss";
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme {
+  --color-darkBlue: #213555;
+  --color-lightBlue: #3e5879;
+  --color-darkPurple: #3a3f5b;
+  --color-lightPurple: #7b86c1;
+  --color-darkGolden: #d8c4b6;
+  --color-lightGolden: #f5efe7;
+  --color-brown: #57473b;
+  --color-beige: #f5efe7;
+  --color-slateGrey: #3e5879;
+  --color-navyBlue: #101c2e;
+  --color-slateBlue: #304e80;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+.title {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+.screen_height {
+  height: calc(100vh - 30px);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.container_screen_height {
+  height: calc(100vh - 270px);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.fancyButton::before {
+  content: "";
+  position: absolute;
+  bottom: 0; /* Line appears at the bottom of the button */
+  left: 50%; /* Start from the center */
+  width: 0%; /* No line initially */
+  height: 5px; /* Line thickness */
+  background-color: var(--color-beige); /* Color of the line */
+  transition: all 0.3s ease; /* Smooth transition */
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.fancyButton:hover::before {
+  width: 50%; /* Line expands to cover half the button width */
+  left: 25%; /* Re-centers the line under the button */
+}
+
+/* For modern browsers */
+.interviewBox::-webkit-scrollbar {
+  width: 20px; /* Width of the scrollbar */
+}
+
+.interviewBox::-webkit-scrollbar-thumb {
+  background-color: #404040; /* Semi-transparent thumb */
+  border-radius: 10px; /* Makes the scrollbar rounded */
+}
+
+.interviewBox::-webkit-scrollbar-track {
+  background: transparent; /* Transparent background */
+}
+
+.interviewBox::-moz-scrollbar-thumb {
+  background-color: #404040; /* Semi-transparent thumb */
+  border-radius: 10px;
+}
+
+.temp {
+  background-color: red;
+}
+
+.tomp {
+  background-color: blue;
 }
