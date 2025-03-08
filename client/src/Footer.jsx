@@ -5,7 +5,7 @@ const Footer = ({ borderingColor = "white" }) => {
         className="absolute w-3/4 h-[20px] top-0 left-1/2 transform -translate-x-1/2 rounded-bl-xl rounded-br-xl"
         style={{ backgroundColor: borderingColor }}
       ></div>
-      <h1 className="text-3xl font-bold mb-3 ml-10">TITLE OF PRODUCT</h1>
+      <h1 className="text-3xl font-bold mb-3 ml-10">Intervu</h1>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="#213555"
