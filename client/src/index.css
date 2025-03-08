@@ -13,3 +13,58 @@
   --color-navyBlue: #101c2e;
   --color-slateBlue: #304e80;
 }
+
+.title {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.screen_height {
+  height: calc(100vh - 30px);
+}
+
+.container_screen_height {
+  height: calc(100vh - 270px);
+}
+
+.fancyButton::before {
+  content: "";
+  position: absolute;
+  bottom: 0; /* Line appears at the bottom of the button */
+  left: 50%; /* Start from the center */
+  width: 0%; /* No line initially */
+  height: 5px; /* Line thickness */
+  background-color: var(--color-beige); /* Color of the line */
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+.fancyButton:hover::before {
+  width: 50%; /* Line expands to cover half the button width */
+  left: 25%; /* Re-centers the line under the button */
+}
+
+/* For modern browsers */
+.interviewBox::-webkit-scrollbar {
+  width: 20px; /* Width of the scrollbar */
+}
+
+.interviewBox::-webkit-scrollbar-thumb {
+  background-color: #404040; /* Semi-transparent thumb */
+  border-radius: 10px; /* Makes the scrollbar rounded */
+}
+
+.interviewBox::-webkit-scrollbar-track {
+  background: transparent; /* Transparent background */
+}
+
+.interviewBox::-moz-scrollbar-thumb {
+  background-color: #404040; /* Semi-transparent thumb */
+  border-radius: 10px;
+}
+
+.temp {
+  background-color: red;
+}
+
+.tomp {
+  background-color: blue;
+}

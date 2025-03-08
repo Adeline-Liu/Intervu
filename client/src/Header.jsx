@@ -1,3 +1,4 @@
+import AccountButton from "./components/AccountButton";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -18,6 +19,11 @@ const Header = () => {
             Intervu
           </button>
         </div>
+        <AccountButton
+          bgColor="var(--color-darkBlue)"
+          textColor="white"
+          bgColorHover="var(--color-slateGrey)"
+        />
       </div>
     </nav>
   );

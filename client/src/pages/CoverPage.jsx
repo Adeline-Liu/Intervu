@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import Header from "../Header";
 import Footer from "../Footer";
+import WaveGenerator from "../components/WaveGenerator";
 
 const CoverPage = () => {
   const navigate = useNavigate();
+  const waveHeight = 125;
 
   const handleLoginClick = () => {
     navigate("/login");
@@ -18,11 +20,21 @@ const CoverPage = () => {
         {/* Title section */}
         <div className="title flex items-left h-[75%] px-[100px] py-[50px] items-center">
           <h1 className="text-8xl font-bold text-darkBlue mb-10 max-w-5xl leading-30">
-            Some cool marketing thing
+            Practice Smarter. Interview Better.
           </h1>
         </div>
         {/* Wave border */}
-        <div className="absolute left-0 right-0 -bottom-1 w-full"></div>
+        <div className="absolute left-0 right-0 -bottom-1 w-full">
+          <WaveGenerator
+            amplitude={waveHeight / 2}
+            frequency={0.005}
+            height={waveHeight}
+            speed={0.05}
+            unmaskedBg="var(--color-beige)"
+            leftGradient="var(--color-darkPurple)"
+            rightGradient="var(--color-lightPurple)"
+          />
+        </div>
       </section>
 
       {/* Info section */}
@@ -30,10 +42,21 @@ const CoverPage = () => {
         <div
           className="absolute left-0 right-0 top-0 w-full rotate-180"
           style={{ zIndex: -1 }}
-        ></div>
+        >
+          <WaveGenerator
+            amplitude={waveHeight / 2}
+            frequency={0.005}
+            height={waveHeight + 30}
+            speed={0.08}
+            unmaskedBg="var(--color-darkGolden)"
+            leftGradient="var(--color-darkPurple)"
+            rightGradient="var(--color-lightPurple)"
+            is_rotated={1}
+          />
+        </div>
         <div>
           <h2 className="text-5xl font-semibold text-white mb-3 ml-6 py-[20px]">
-            Some title
+            Simple. Smart. Effective. Here's How:
           </h2>
           <div className="w-30 border-b-5 border-darkGolden mb-6 ml-6"></div>
 
