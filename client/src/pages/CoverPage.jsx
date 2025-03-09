@@ -19,7 +19,7 @@ const CoverPage = () => {
       <div role="main">
         <section className="relative text-left bg-beige screen_height" role="banner">
           {/* Title section */}
-          <div className = "title flex items-left h-[75%] px-[100px] py-[50px] items-center">
+          <div className = "title flex h-[75%] px-[100px] py-[50px] items-center">
             <div>
               <h1 className="text-8xl font-bold text-darkBlue mb-10 max-w-5xl">
                 Practice <i>Smarter</i>
