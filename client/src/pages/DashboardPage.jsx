@@ -1,0 +1,92 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+import Header from "../Header";
+import Footer from "../Footer";
+import ResumeUploader from "../components/ResumeUploader";
+import ResumePreviewer from "../components/ResumePreviewer";
+import JobDescriptionSelector from "../components/JobDescriptionSelector";
+import JobDescriptionSelected from "../components/JobDescriptionSelected";
+
+const DashboardPage = () => {
+  const navigate = useNavigate();
+
+  const [fileKey, setFileKey] = useState(""); // for resume
+  const [selectedJob, setSelectedJob] = useState(null); // for job description
+
+  //   NOTE: This is a very simple navigation click, checks still need to be done to ensure a resume is uploaded and job description
+  //         is selected before navigating to the mock interview page. Update when backend is done.
+  const handleInterviewClick = () => {
+    navigate("/mock_interview");
+  };
+
+  return (
+    <div>
+      <Header />
+      {/* Title */}
+      <section className="px-[100px] py-[50px] items-center bg-beige">
+        <h1 className="text-6xl font-bold text-darkBlue max-w-5xl leading-20">
+          Dashboard
+        </h1>
+        <div className="w-35 border-b-5 border-lightPurple"></div>
+      </section>
+      {/* Resume upload */}
+      <section>
+        <div className="px-[100px] py-[50px] items-center bg-gradient-to-b from-beige to-darkGolden">
+          <h2 className="text-4xl text-darkBlue py-[20px] font-bold">
+            Resume Upload
+          </h2>
+          <div className="flex">
+            <div className="w-1/2 flex items-center">
+              <ResumeUploader
+                onUploadComplete={setFileKey}
+                bgColor="var(--color-brown)"
+                textColor="white"
+                bgColorHover="#3b2e23"
+              />
+            </div>
+            {/* Resume Preview Section */}
+            <div className="w-1/2 flex items-center h-[400px] border-2 border-gray-300 rounded-lg p-4 bg-white shadow-md justify-center">
+              {fileKey ? (
+                <ResumePreviewer fileKey={fileKey} />
+              ) : (
+                <p className="text-darkBlue text-xl">
+                  Upload a PDF resume to preview.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Job Description Upload/Search */}
+      <section>
+        <div className="px-[100px] py-[50px] items-center bg-gradient-to-b from-darkGolden to-darkPurple">
+          <JobDescriptionSelector
+            setSelectedJob={setSelectedJob}
+            textColor="var(--color-darkBlue)"
+            itemBackgroundColor="var(--color-darkBlue)"
+          />
+          <JobDescriptionSelected selectedJob={selectedJob} />
+        </div>
+      </section>
+      {/* Practice with AI */}
+      <section className="px-[100px] py-[50px] items-center bg-darkPurple">
+        <h1 className="text-5xl font-bold text-white w-full text-center my-[30px]">
+          Practice Interview with AI
+        </h1>
+        <div className="flex justify-center my-[30px]">
+          <button
+            className="font-bold text-center text-3xl bg-[#5c6491] text-white px-[32px] py-[20px] rounded-md hover:bg-[#444A6B] transition-colors"
+            onClick={handleInterviewClick}
+          >
+            Practice Now
+          </button>
+        </div>
+      </section>
+      <Footer borderingColor="var(--color-darkPurple)" />
+    </div>
+  );
+};
+
+export default DashboardPage;
