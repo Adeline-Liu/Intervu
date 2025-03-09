@@ -24,7 +24,6 @@ function JobDescriptionSearcher({ setSelectedJob }) {
         <h2 id="SearchJobDescription"className="text-4xl text-darkBlue py-[20px] font-bold">
           Search for a Job Description
         </h2>
-        <label htmlFor="jobSearch" className="visually-hidden">Job Title</label>
         <input
           type="search"
           id="jobSearch"
@@ -33,6 +32,7 @@ function JobDescriptionSearcher({ setSelectedJob }) {
           onChange={(e) => handleSearch(e.target.value)}
           role="search"
         />
+        <label htmlFor="jobSearch" className="visually-hidden hidden">Job Search</label>
       </div>
       {/* This code is to demonstrate what an item may look like. Remove when backend is ready */}
       <ul role="list">

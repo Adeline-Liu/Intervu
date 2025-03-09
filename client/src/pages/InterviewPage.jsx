@@ -45,30 +45,47 @@ const InterviewPage = () => {
   const recognitionRef = useRef(null);
   const feedbackRef = useRef(null);
   const mockInterviewRef = useRef(null);
+  const [feedback, setFeedback] = useState([]);
 
   // for testing purposes only, remove later
-  const questions = [
-    "Why do you want to work at this company?",
-    "What are your strengths and weaknesses?",
-  ];
+  // const questions = [
+  //   "Why do you want to work at this company?",
+  //   "What are your strengths and weaknesses?",
+  // ];
 
-  const [answers, setAnswers] = useState(new Array(questions.length).fill(""));
+  // const [answers, setAnswers] = useState(new Array(questions.length).fill(""));
 
-  // const [questions, setQuestions] = useState([]);
-  // const [answers, setAnswers] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]);
 
-  // useEffect(() => {
-  //   // Fetch questions from the backend
-  //   fetch('your-backend-endpoint')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setQuestions(data.questions);
-  //       setAnswers(new Array(data.questions.length).fill(""));
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching questions:', error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    // Fetch questions from the backend
+    fetch('http://54.81.170.161:8000/get_questions/user_id/job_id')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched questions:', data.questions); // Print fetched questions
+        const parsedQuestions = data.questions.map((question, index) => ({
+          id: index + 1,
+          text: question
+        }));
+        setQuestions(parsedQuestions);
+        setAnswers(new Array(parsedQuestions.length).fill(""));
+      })
+      .catch(error => {
+        console.error('Error fetching questions:', error);
+      });
+
+    // Fetch feedback from the backend
+    fetch('http://localhost:8000/feedback')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched feedback:', data); // Print fetched feedback
+        setFeedback(data);
+      })
+      .catch(error => {
+        console.error('Error fetching feedback:', error);
+      });
+  }, []);
 
   const handleDashboardClick = () => {
     navigate("/dashboard");
@@ -245,7 +262,13 @@ const InterviewPage = () => {
           <div className="px-[100px] py-[50px] items-center bg-navyBlue">
             <h2 id="Feedback" ref={feedbackRef} className="text-4xl text-white py-[20px] font-bold"> Feedback </h2>
             <div className="bg-darkBlue px-[50px] py-[30px] rounded-[15px]">
-              <p className="text-2xl font-semibold text-white w-full">Yaya</p>
+              {feedback.length === 0 ? (
+                <p className="text-2xl font-semibold text-white w-full" style={{color: "lightcoral"}}>No feedback available yet</p>
+              ) : (
+                feedback.map((item, index) => (
+                  <p key={index} className="text-2xl font-semibold text-white w-full">{item}</p>
+                ))
+              )}
               <div className="flex justify-center my-[30px]">
                 <button className="font-bold text-center text-3xl bg-slateBlue text-white px-[32px] py-[20px] rounded-md hover:bg-[#28416B] transition-colors" role="button"> Save to local directory </button>
               </div>
