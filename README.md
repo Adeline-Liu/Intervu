@@ -1,12 +1,25 @@
-# React + Vite
+# AI-Powered Interview Prep App 🎙️🤖
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Practice mock interviews with AI, get feedback, and land your dream job!
 
-Currently, two official plugins are available:
+## 📌 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1️⃣ Upload your resume
 
-## Expanding the ESLint configuration
+2️⃣ Enter the job title & company
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3️⃣ Start a mock interview with AI
+
+4️⃣ Receive instant feedback to improve!
+
+## 🛠️ Tech Stack
+
+🔹 Frontend: React (Vite), Tailwind CSS
+
+🔹 Backend: Flask, Python LangChain
+
+🔹 Database: AWS OpenSearch
+
+🔹 Deployment: AWS S3 (Frontend), AWS ECS (Backend)
+
+🔹 Storage: AWS S3 (Resumes)

@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import CoverPage from "./pages/CoverPage";
 import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import DashboardPage from "./pages/DashboardPage";
+import InterviewPage from "./pages/InterviewPage";
 
 function App() {
   return (
@@ -11,6 +14,9 @@ function App() {
         <Routes>
           <Route path="/" element={<CoverPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/mock_interview" element={<InterviewPage />} />
         </Routes>
       </div>
     </Router>
