@@ -16,10 +16,8 @@
 
 🔹 Frontend: React (Vite), Tailwind CSS
 
-🔹 Backend: Flask, Python LangChain
+🔹 Backend: FastApi, Python, LangChain, Okta FGA
 
 🔹 Database: AWS OpenSearch
 
-🔹 Deployment: AWS S3 (Frontend), AWS ECS (Backend)
-
-🔹 Storage: AWS S3 (Resumes)
+🔹 Deployment: AWS S3 (Frontend), AWS EC2 (Backend)

@@ -8,6 +8,7 @@ function JobDescriptionSearcher({ setSelectedJob }) {
 
   const handleSearch = async () => {
     const formData = new FormData();
+
     formData.append("query", query);
 
     try {
