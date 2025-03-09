@@ -60,7 +60,7 @@ const InterviewPage = () => {
 
   useEffect(() => {
     // Fetch questions from the backend
-    fetch('http://54.81.170.161:8000/get_questions/user_id/job_id')
+    fetch('http://54.81.170.161:8000/get_questions/2/1')
       .then(response => response.json())
       .then(data => {
         console.log('Fetched questions:', data.questions); // Print fetched questions
@@ -76,15 +76,15 @@ const InterviewPage = () => {
       });
 
     // Fetch feedback from the backend
-    fetch('http://localhost:8000/feedback')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched feedback:', data); // Print fetched feedback
-        setFeedback(data);
-      })
-      .catch(error => {
-        console.error('Error fetching feedback:', error);
-      });
+    // fetch('http://localhost:8000/feedback')
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log('Fetched feedback:', data); // Print fetched feedback
+    //     setFeedback(data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error fetching feedback:', error);
+    //   });
   }, []);
 
   const handleDashboardClick = () => {

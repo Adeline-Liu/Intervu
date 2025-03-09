@@ -29,7 +29,7 @@ function ResumeUploader({
       formData.append('file', file);
   
       // Send the form data to the backend
-      const response = await axios.post('/your-backend-endpoint', formData, {
+      const response = await axios.post('http://54.81.170.161:8000/upload_resume/5', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
