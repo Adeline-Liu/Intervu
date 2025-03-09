@@ -3,49 +3,71 @@ import { useState } from "react";
 
 function JobDescriptionSearcher({ setSelectedJob }) {
   const [searchResults, setSearchResults] = useState([]);
+  const [query, setQuery] = useState("");
+  const [searchPerformed, setSearchPerformed] = useState(false);
 
-//   This is a temporary variable to demonstrate styling, remove when backend is ready
-  const mockJob = {
-    title: "Botato Developer",
-    company: "Botato Inc.",
-    description:
-      "I like botatoes. Botatoes are very nice. If are also a botato fan, you should get yourself a botato. You shouldn't get yourself only 1 botato, you should get many more botatoes. Botatoes are going to be the only way you can get this position so you better own a botato. Make sure you bring enough botatoes for the whole team to have. We take botatoes very seriously and if you do not bring a botato then you will be botatoed",
-  };
+  const handleSearch = async () => {
+    const formData = new FormData();
+    formData.append('query', query);
 
-  const handleSearch = async (query) => {
-    const response = await fetch(`/search?query=${query}`); // Replace with your backend endpoint
-    const results = await response.json();
-    setSearchResults(results);
+    try {
+      const response = await fetch('http://54.81.170.161:8000/get_jobs', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSearchResults(data.jobs);
+        setSearchPerformed(true);
+      } else {
+        console.error("Error fetching jobs:", response.statusText);
+        setSearchResults([]);
+        setSearchPerformed(true);
+      }
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      setSearchResults([]);
+      setSearchPerformed(true);
+    }
   };
 
   return (
-    <div role="region" aria-labelledby="SearchJobDescription">
-      <div className = "mb-[20px]">
-        <h2 id="SearchJobDescription"className="text-4xl text-darkBlue py-[20px] font-bold">
+    <div className = "mb-[20px]" role="region" aria-labelledby="SearchJobDescription">
+      <div className="mb-[20px]">
+        <h2 id="SearchJobDescription" className="text-4xl text-darkBlue py-[20px] font-bold">
           Search for a Job Description
         </h2>
-        <input
-          type="search"
-          id="jobSearch"
-          placeholder="Search for a job description"
-          className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 mt-3 bg-white"
-          onChange={(e) => handleSearch(e.target.value)}
-          role="search"
-        />
-        <label htmlFor="jobSearch" className="visually-hidden hidden">Job Search</label>
+        <div className="flex items-center justify-center space-x-3 pt-3">
+          <input
+            type="search"
+            id="jobSearch"
+            placeholder="Search for a job description"
+            className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+            onChange={(e) => setQuery(e.target.value)}
+            role="search"
+          />
+          <label htmlFor="jobSearch" className="visually-hidden hidden">Job Search</label>
+          <button
+            onClick={handleSearch}
+            className="px-4 py-2 bg-brown text-xl text-white font-semibold rounded-md transition-colors duration-300 hover:bg-[#3b2e23]"
+            role="button"
+            aria-label="Search for jobs"
+          >
+            Search
+          </button>
+        </div>
       </div>
-      {/* This code is to demonstrate what an item may look like. Remove when backend is ready */}
+      <div className="flex justify-center">
+        {searchPerformed && searchResults.length === 0 && (
+          <p className="text-darkBlue text-2xl mb-5 font-bold">No results found</p>
+        )}
+      </div>
       <ul role="list">
-        <JobItem job={mockJob} setSelectedJob={setSelectedJob} />
-        <JobItem job={mockJob} setSelectedJob={setSelectedJob} />
+        {searchResults.map((job, index) => (
+          <JobItem key={index} job={job} setSelectedJob={setSelectedJob} />
+        ))}
       </ul>
-      <div className="p-[20px] rounded-[15px]">
-        <ul>
-          {searchResults.map((job, index) => (
-            <JobItem key={index} job={job} setSelectedJob={setSelectedJob} />
-          ))}
-        </ul>
-      </div>
     </div>
   );
 }
@@ -70,13 +92,13 @@ function JobItem({ job, setSelectedJob }) {
       role="listitem"
     >
       <h3 className="text-3xl mb-[10px] font-semibold">
-        {job.title} - {job.company}
+        {job.job_title} - {job.job_company}
       </h3>
       <div className="w-35 border-b-5 border-darkGolden"></div>
       <p className="text-xl mt-[20px]">
-        {truncateText(job.description)}
+        {truncateText(job.job_description)}
       </p>
-      {job.description.length > 100 && (
+      {job.job_description.length > 100 && (
         <button
           className="text-beige mt-2 underline"
           onClick={(e) => {
@@ -84,7 +106,7 @@ function JobItem({ job, setSelectedJob }) {
             setIsExpanded(!isExpanded);
           }}
           role="button"
-          aria-label={`${job.title} from ${job.company} to show mroe or less text`}
+          aria-label={`${job.job_title} from ${job.job_company} to show more or less text`}
         >
           {isExpanded ? "Show less" : "Show more"}
         </button>

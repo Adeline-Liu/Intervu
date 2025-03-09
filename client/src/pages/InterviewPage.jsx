@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from "../Header";
 import Footer from "../Footer";
 import CameraView from "../components/CameraView";
+import { saveAs } from 'file-saver';
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -32,11 +33,6 @@ const InterviewPage = () => {
   const [interviewState, setInterviewState] = useState('start');
   const [paragraphs, setParagraphs] = useState([
     {text: "Welcome to Intervu! Click start to start the mock interview.", color: "white"}
-    // { text: "This is how a really long text may appear. The actual functionality of text appearing here in real time has to be implemented when the backend is fully implemented for the AI to produce a response and for the user to give feedback through the microphone", color: "beige" },
-    // { text: "This might be text which is interpreted when you speak into the program, very cool just make sure you don't goof up", color: "beige" },
-    // { text: "I'm just writing more dummy text because I don't know what else to write about :,). Why do you want to work at Botato, did you bring your botato? Botatos are always a neceseciety (I can't spell) when interviewing with Botato Inc.", color: "beige" },
-    // { text: "AAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAA", color: "beige" },
-    // { text: "I just want to have enough text to exceed the container please let me do that T^T", color: "beige" }
   ]);
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [userResponse, setUserResponse] = useState("");
@@ -47,16 +43,9 @@ const InterviewPage = () => {
   const mockInterviewRef = useRef(null);
   const [feedback, setFeedback] = useState([]);
 
-  // for testing purposes only, remove later
-  // const questions = [
-  //   "Why do you want to work at this company?",
-  //   "What are your strengths and weaknesses?",
-  // ];
-
-  // const [answers, setAnswers] = useState(new Array(questions.length).fill(""));
-
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
+  const [questionsLoaded, setQuestionsLoaded] = useState(false);
 
   useEffect(() => {
     // Fetch questions from the backend
@@ -70,26 +59,21 @@ const InterviewPage = () => {
         }));
         setQuestions(parsedQuestions);
         setAnswers(new Array(parsedQuestions.length).fill(""));
+        setQuestionsLoaded(true);
       })
       .catch(error => {
         console.error('Error fetching questions:', error);
       });
-
-    // Fetch feedback from the backend
-    // fetch('http://localhost:8000/feedback')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log('Fetched feedback:', data); // Print fetched feedback
-    //     setFeedback(data);
-    //   })
-    //   .catch(error => {
-    //     console.error('Error fetching feedback:', error);
-    //   });
   }, []);
 
   const handleDashboardClick = () => {
     navigate("/dashboard");
     mockInterviewRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const saveFeedbackToFile = () => {
+    const blob = new Blob([feedback], { type: 'text/plain;charset=utf-8' });
+    saveAs(blob, 'feedback.txt');
   };
 
   const addParagraph = (text, color = "white") => {
@@ -104,9 +88,9 @@ const InterviewPage = () => {
   const startAsking = () => {
     setInterviewState('asking');
     const question = questions[questionIndex];
-    addParagraph(question, "lightblue");
+    addParagraph(question.text, "lightblue");
     setTimeout(() => {
-      setCurrentQuestion(question);
+      setCurrentQuestion(question.text);
       setInterviewState('doneAsking');
     }, 3000);
   };
@@ -143,8 +127,6 @@ const InterviewPage = () => {
     try {
       recognitionRef.current.start();
     } catch (error) {
-      // addParagraph("Microphone isn't enabled or an error occurred during speech recognition");
-      // setInterviewState('asking');
       setInterviewState('responding');
     }
   };
@@ -179,7 +161,8 @@ const InterviewPage = () => {
   };
 
   const handleButtonClick = () => {
-    console.log(questionIndex);
+    console.log(questions)
+    console.log(answers)
     switch (interviewState) {
       case 'start':
         startInterview();
@@ -209,28 +192,32 @@ const InterviewPage = () => {
   
     questions.forEach((question, index) => {
       response[index + 1] = {
-        [`question${index + 1}`]: question,
+        [`question${index + 1}`]: question.text,
         [`answer${index + 1}`]: answers[index],
       };
     });
+    
+    const jsonData = JSON.stringify({ response });    
   
-    const jsonData = JSON.stringify({ response });
+    const url = 'http://54.81.170.161:8000/feedback/';  // Ensure the backend endpoint is using POST
   
-    fetch('your-backend-endpoint', {
-      method: 'POST',
+    fetch(url, {
+      method: 'POST',  // Use POST method
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json',  // Set content type to JSON
       },
-      body: jsonData,
+      body: jsonData,  // Send the data as JSON in the body
     })
       .then(response => response.json())
       .then(result => {
+        const feedback = result.feedback;  // Extract the feedback from the result
+        setFeedback(feedback);  // Update the state with the feedback
         console.log('Success:', result);
       })
       .catch(error => {
         console.error('Error:', error);
       });
-  };  
+  };
 
   return (
     <div>
@@ -243,8 +230,15 @@ const InterviewPage = () => {
               <div className="w-35 border-b-5 border-lightPurple mb-[20px]"></div>
               <h1 className="text-2xl font-semibold text-beige leading-10"><u>Job Title</u>: JOB TITLE</h1>
               <h1 className="text-2xl font-semibold text-beige leading-15"><u>Company</u>: COMPANY</h1>
-              <button className="font-semibold text-center text-3xl bg-slateBlue text-white my-[50px] px-[50px] py-[20px] rounded-md hover:bg-[#28416B] transition-colors" role="button" aria-label="Start mock interview" onClick={handleButtonClick}>
-                {interviewState === 'start' ? 'Start' : 
+              <button 
+                className={`font-semibold text-center text-3xl bg-slateBlue text-white my-[50px] px-[50px] py-[20px] rounded-md hover:bg-[#28416B] transition-colors ${!questionsLoaded ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                role="button" 
+                aria-label="Start mock interview" 
+                onClick={questionsLoaded ? handleButtonClick : null}
+                disabled={!questionsLoaded}
+              >
+                {!questionsLoaded ? 'Loading...' :
+                interviewState === 'start' ? 'Start' : 
                 interviewState === 'asking' ? 'Asking question' : 
                 interviewState === 'doneAsking' ? 'Start responding' :
                 interviewState === 'responding' ? 'Stop responding' : 
@@ -265,12 +259,14 @@ const InterviewPage = () => {
               {feedback.length === 0 ? (
                 <p className="text-2xl font-semibold text-white w-full" style={{color: "lightcoral"}}>No feedback available yet</p>
               ) : (
-                feedback.map((item, index) => (
-                  <p key={index} className="text-2xl font-semibold text-white w-full">{item}</p>
-                ))
+                <p className="text-2xl font-semibold text-white w-full">{feedback}</p>
               )}
               <div className="flex justify-center my-[30px]">
-                <button className="font-bold text-center text-3xl bg-slateBlue text-white px-[32px] py-[20px] rounded-md hover:bg-[#28416B] transition-colors" role="button"> Save to local directory </button>
+                <button className="font-bold text-center text-3xl bg-slateBlue text-white px-[32px] py-[20px] rounded-md hover:bg-[#28416B] transition-colors"
+                role="button"
+                onClick={saveFeedbackToFile}>
+                  Save to local directory
+                </button>
               </div>
             </div>
           </div>
