@@ -8,17 +8,17 @@ const SingupPage = () => {
     <div>
       <Header />
 
-      <div className="flex items-center justify-center px-[100px] py-[50px] bg-darkGolden screen_height">
+      <div className="flex items-center justify-center px-[100px] py-[50px] bg-darkGolden screen_height" role="main">
         <div className="bg-beige p-10 rounded-xl shadow-md w-[50%] h-fit">
           <h2 className="text-center text-4xl font-semibold text-darkBlue">
             Sign up to
           </h2>
           <h1 className="text-center text-4xl font-bold text-darkBlue mt-1">
-            Intervu
+            TITLE OF PRODUCT
           </h1>
           <div className="w-18 border-b-2 border-darkGolden mx-auto mt-2"></div>
 
-          <form className="mt-6">
+          <form className="mt-6" role="form">
             <div>
               <input
                 type="text"
@@ -37,7 +37,7 @@ const SingupPage = () => {
               <button
                 type="submit"
                 className="text-center text-3xl bg-brown text-white px-[32px] py-[20px] rounded-md hover:bg-[#3b2e23] transition-colors mt-[20px]"
-              >
+                role="button">
                 Sign up
               </button>
             </div>
@@ -45,7 +45,7 @@ const SingupPage = () => {
         </div>
       </div>
 
-      <Footer borderingColor="var(--color-darkGolden)" />
+      <Footer borderingColor = "var(--color-darkGolden)"/>
     </div>
   );
 };

@@ -27,6 +27,7 @@ const AccountButton = ({
         onMouseLeave={(e) => {
           e.target.style.backgroundColor = bgColor;
         }}
+        role="button"
       >
         Login
       </button>

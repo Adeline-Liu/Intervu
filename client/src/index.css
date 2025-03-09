@@ -3,15 +3,19 @@
 @theme {
   --color-darkBlue: #213555;
   --color-lightBlue: #3e5879;
-  --color-darkPurple: #3a3f5b;
-  --color-lightPurple: #7b86c1;
+  --color-darkPurple: #3A3F5B;
+  --color-lightPurple: #7B86C1;
   --color-darkGolden: #d8c4b6;
   --color-lightGolden: #f5efe7;
   --color-brown: #57473b;
   --color-beige: #f5efe7;
-  --color-slateGrey: #3e5879;
-  --color-navyBlue: #101c2e;
+  --color-slateGrey: #3E5879;
+  --color-navyBlue: #101C2E;
   --color-slateBlue: #304e80;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .title {
@@ -67,4 +71,14 @@
 
 .tomp {
   background-color: blue;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }

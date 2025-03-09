@@ -4,7 +4,7 @@ import { useState } from "react";
 function JobDescriptionSearcher({ setSelectedJob }) {
   const [searchResults, setSearchResults] = useState([]);
 
-  //   This is a temporary variable to demonstrate styling, remove when backend is ready
+//   This is a temporary variable to demonstrate styling, remove when backend is ready
   const mockJob = {
     title: "Botato Developer",
     company: "Botato Inc.",
@@ -19,9 +19,9 @@ function JobDescriptionSearcher({ setSelectedJob }) {
   };
 
   return (
-    <div>
-      <div className="mb-[20px]">
-        <h2 className="text-4xl text-darkBlue py-[20px] font-bold">
+    <div role="region" aria-labelledby="SearchJobDescription">
+      <div className = "mb-[20px]">
+        <h2 id="SearchJobDescription"className="text-4xl text-darkBlue py-[20px] font-bold">
           Search for a Job Description
         </h2>
         <input
@@ -29,10 +29,11 @@ function JobDescriptionSearcher({ setSelectedJob }) {
           placeholder="Search for a job description"
           className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 mt-3 bg-white"
           onChange={(e) => handleSearch(e.target.value)}
+          role="search"
         />
       </div>
       {/* This code is to demonstrate what an item may look like. Remove when backend is ready */}
-      <ul>
+      <ul role="list">
         <JobItem job={mockJob} setSelectedJob={setSelectedJob} />
         <JobItem job={mockJob} setSelectedJob={setSelectedJob} />
       </ul>
@@ -64,12 +65,15 @@ function JobItem({ job, setSelectedJob }) {
       style={{
         transition: "border-left 0.3s ease",
       }}
+      role="listitem"
     >
       <h3 className="text-3xl mb-[10px] font-semibold">
         {job.title} - {job.company}
       </h3>
       <div className="w-35 border-b-5 border-darkGolden"></div>
-      <p className="text-xl mt-[20px]">{truncateText(job.description)}</p>
+      <p className="text-xl mt-[20px]">
+        {truncateText(job.description)}
+      </p>
       {job.description.length > 100 && (
         <button
           className="text-beige mt-2 underline"
@@ -77,6 +81,8 @@ function JobItem({ job, setSelectedJob }) {
             e.stopPropagation();
             setIsExpanded(!isExpanded);
           }}
+          role="button"
+          aria-label={`${job.title} from ${job.company} to show mroe or less text`}
         >
           {isExpanded ? "Show less" : "Show more"}
         </button>
