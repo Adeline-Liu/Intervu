@@ -33,6 +33,7 @@ function JobDescriptionCreator({ setSelectedJob, textColor = "black" }) {
     <div className="px-[50px] py-[30px] bg-beige rounded-[15px]" role="region" aria-labelledby="CreateJobDescription">
       <h2 id="CreateJobDescription" className="text-4xl text-darkBlue py-[20px] font-bold">Create Job Description</h2>
       <form onSubmit={handleSubmit} role="form">
+        <label htmlFor="jobTitle" className="visually-hidden">Job Title</label>
         <input
           type="text"
           id="jobTitle"
@@ -42,7 +43,7 @@ function JobDescriptionCreator({ setSelectedJob, textColor = "black" }) {
           className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 mt-3 bg-white"
           required
         />
-        <label htmlFor="jobTitle" className="sr-only" style={{display: 'none'}}>Job Title</label>
+        <label htmlFor="company" className="visually-hidden">Company</label>
         <input
           type="text"
           id="company"
@@ -52,7 +53,7 @@ function JobDescriptionCreator({ setSelectedJob, textColor = "black" }) {
           className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 mt-3 bg-white"
           required
         />
-        <label htmlFor="company" className="sr-only" style={{display: 'none'}}>Company</label>
+        <label htmlFor="jobDescription" className="visually-hidden">Job Description</label>
         <textarea
           placeholder="Job Description"
           id="jobDescription"
@@ -61,7 +62,6 @@ function JobDescriptionCreator({ setSelectedJob, textColor = "black" }) {
           className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 mt-3 bg-white"
           required
         ></textarea>
-        <label htmlFor="jobDescription" className="sr-only" style={{display: 'none'}}>Job Description</label>
         <div className="w-full flex justify-center mt-[20px]">
           <button type="submit" className="text-center text-2xl font-semibold px-[32px] py-[20px] rounded-md transition-colors duration-300"
             style={{

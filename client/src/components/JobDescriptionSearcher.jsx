@@ -24,8 +24,10 @@ function JobDescriptionSearcher({ setSelectedJob }) {
         <h2 id="SearchJobDescription"className="text-4xl text-darkBlue py-[20px] font-bold">
           Search for a Job Description
         </h2>
+        <label htmlFor="jobSearch" className="visually-hidden">Job Title</label>
         <input
           type="search"
+          id="jobSearch"
           placeholder="Search for a job description"
           className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 mt-3 bg-white"
           onChange={(e) => handleSearch(e.target.value)}
