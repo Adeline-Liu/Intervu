@@ -1,6 +1,7 @@
 import os
 import uuid
 import asyncio
+from pydantic import BaseModel
 import uvicorn
 from fastapi import FastAPI, File, Form, UploadFile, HTTPException
 from dotenv import load_dotenv
@@ -23,6 +24,10 @@ from helper.open_search_store import OpenSearchStore
 from helper.read_doc import *
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from typing import Dict
+from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
+from langchain.llms import OpenAI
 
 # Load environment variables
 load_dotenv()
@@ -38,6 +43,9 @@ posting_store = store.store["postings"]
 # Initialize RAG
 rag = RAG()
 
+class QuestionAnswer(BaseModel):
+    response: Dict[str, Dict[str, str]]
+    
 # Initialize OpenFGA client configuration
 def get_fga_client():
     fga_configuration = ClientConfiguration(
@@ -92,7 +100,8 @@ def wrap_text(text, max_width):
     from reportlab.pdfgen import canvas
     from reportlab.lib import colors
 
-    temp_canvas = canvas.Canvas("/dev/null", pagesize=letter)  
+    # Create a canvas to measure the text width
+    temp_canvas = canvas.Canvas("/dev/null", pagesize=letter)  # Dummy canvas to calculate width
 
     lines = []
     words = text.split(' ')
@@ -269,6 +278,40 @@ async def get_related_jobs(query: str = Form(...),):
         return {"jobs": jobs}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Create a template for the LangChain to format the feedback
+feedback_template = """
+You are an AI reviewer. Below are some interview questions and answers.
+{questions_and_answers}
+Provide constructive feedback in the form of a well-written paragraph.
+"""
+
+@app.get("/feedback/")
+async def get_feedback(data: QuestionAnswer):
+    try:
+        # Extract the question and answer pairs from the incoming data
+        response_data = data.response
+        questions_and_answers = ""
+
+        # Format the question-answer pairs for the LangChain prompt
+        for key, qa_pair in response_data.items():
+            question = qa_pair.get(f"question{key}")
+            answer = qa_pair.get(f"answer{key}")
+            questions_and_answers += f"Question {key}: {question}\nAnswer {key}: {answer}\n\n"
+
+        # Create the LangChain prompt
+        prompt = feedback_template.format(questions_and_answers=questions_and_answers)
+
+        # Run the prompt through LangChain
+        llm = OpenAI(temperature=0.7)
+        llm_chain = LLMChain(llm=llm, prompt=PromptTemplate(input_variables=["questions_and_answers"], template=prompt))
+        feedback = llm_chain.run({"questions_and_answers": questions_and_answers}).strip("\n")
+
+        # Return the feedback as a JSON response
+        return {"feedback": feedback}
+    
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error processing data: {str(e)}")
     
 # Run FastAPI app
 if __name__ == "__main__":
