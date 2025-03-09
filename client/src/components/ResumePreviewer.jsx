@@ -1,19 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // NOTE: comment or remove this when AWS amplify is implemented
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // NOTE: comment or remove this when AWS amplify is implemented
 // import { Storage } from 'aws-amplify'; NOTE: uncomment this when AWS amplify is implemented
 
 // VERY IMPORTANT NOTE: styling must be updated for this when AWS amplify is implemented
 function ResumePreviewer({ fileKey }) {
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPreviewUrl = async () => {
       try {
+        setLoading(true);
+        setError("");
+
         // Get pre-signed URL for preview from the backend
-        const { data } = await axios.get('/api/preview-url', { params: { fileKey } });
+        const { data } = await axios.get("/api/preview-url", {
+          params: { fileKey },
+        });
         setPreviewUrl(data.previewUrl);
       } catch (error) {
-        console.error('Error fetching preview URL:', error);
+        setError("Error loading resume preview.");
+        console.error("Error fetching preview URL:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -34,20 +44,25 @@ function ResumePreviewer({ fileKey }) {
   }, [fileKey]);
 
   return (
-    <div style = {{backgroundColor: "green"}} role="region" aria-labelledby="PreviewResume">
-      <h2 id="PreviewResume">Preview Your Resume</h2>
-      {previewUrl ? (
+    <div className="w-full h-[400px] flex flex-col items-center justify-center bg-white border border-gray-300 rounded-lg p-4 shadow-md">
+      <h2 className="text-xl font-bold text-darkBlue mb-4">
+        Preview Your Resume
+      </h2>
+      {loading ? (
+        <p className="text-darkBlue">Loading preview...</p>
+      ) : error ? (
+        <p className="text-red-400">{error}</p>
+      ) : previewUrl ? (
         <iframe
           src={previewUrl}
           title="Resume Preview"
-          style={{ width: '100%', height: '600px', border: 'none' }}
+          className="w-full h-[300px] border rounded-lg"
         />
       ) : (
-        <p>No preview available</p>
+        <p className="text-darkBlue">No preview available</p>
       )}
     </div>
   );
 }
 
 export default ResumePreviewer;
-
