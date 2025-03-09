@@ -12,7 +12,152 @@ const InterviewPage = () => {
 
   const handleDashboardClick = () => {
     navigate("/dashboard");
+<<<<<<< Updated upstream
   };
+=======
+    mockInterviewRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const addParagraph = (text, color = "white") => {
+    setParagraphs(prev => [...prev, { text, color }]);
+  };
+
+  const startInterview = () => {
+    startAsking();
+    mockInterviewRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const startAsking = () => {
+    setInterviewState('asking');
+    const question = questions[questionIndex];
+    addParagraph(question, "lightblue");
+    setTimeout(() => {
+      setCurrentQuestion(question);
+      setInterviewState('doneAsking');
+    }, 3000);
+  };
+
+  const startResponding = () => {
+    if (!recognitionRef.current) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = 'en-US';
+      setInterviewState('responding');
+
+      recognitionRef.current.onresult = (event) => {
+        let finalTranscript = '';
+        for (let i = 0; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            finalTranscript += transcript;
+          }
+        }
+        setUserResponse(finalTranscript); // Save the final response in userResponse
+        setDynamicContent(finalTranscript); // Update dynamic content with interim results
+        setInterviewState('responding');
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        addParagraph("Microphone isn't enabled or an error occurred during speech recognition", "red");
+        setInterviewState('responding');
+      };
+    }
+
+    try {
+      recognitionRef.current.start();
+    } catch (error) {
+      // addParagraph("Microphone isn't enabled or an error occurred during speech recognition");
+      // setInterviewState('asking');
+      setInterviewState('responding');
+    }
+  };
+
+    const stopResponding = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      const finalDynamicContent = dynamicContent; // Store the value of dynamicContent
+      addParagraph(finalDynamicContent, "green"); // Add dynamic content to paragraphs
+      addParagraph("Stopping response...", "yellow");
+      setDynamicContent(""); // Clear dynamic content
+
+      // add answers
+      const updatedAnswers = [...answers];
+      updatedAnswers[questionIndex] = userResponse;
+      setAnswers(updatedAnswers);
+
+      setTimeout(() => {
+        setInterviewState('stopped');
+        if (questionIndex + 1 < questions.length) {
+          setQuestionIndex(prev => prev + 1);
+          setInterviewState('stopped');
+        } else {
+          setInterviewState('start');
+          handleSave();
+          feedbackRef.current.scrollIntoView({ behavior: "smooth" });
+          setQuestionIndex(0); // Reset questionIndex after all questions
+        }
+        addParagraph("Stopped", "yellow");
+      }, 1000);
+    }
+  };
+
+  const handleButtonClick = () => {
+    console.log(questionIndex);
+    switch (interviewState) {
+      case 'start':
+        startInterview();
+        break;
+      case 'asking':
+        break;
+      case 'doneAsking':
+        startResponding();
+        break;
+      case 'responding':
+        stopResponding();
+        break;
+      case 'stopping':
+        break;
+      case 'stopped':
+        setTimeout(() => {
+          startAsking();
+        }, 1000);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleSave = () => {
+    const response = {};
+  
+    questions.forEach((question, index) => {
+      response[index + 1] = {
+        [`question${index + 1}`]: question,
+        [`answer${index + 1}`]: answers[index],
+      };
+    });
+  
+    const jsonData = JSON.stringify({ response });
+  
+    fetch('your-backend-endpoint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonData,
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('Success:', result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };  
+>>>>>>> Stashed changes
 
   return (
     <div>
