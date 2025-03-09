@@ -12,8 +12,9 @@ import JobDescriptionSelected from "../components/JobDescriptionSelected";
 const DashboardPage = () => {
   const navigate = useNavigate();
 
-  const [fileKey, setFileKey] = useState(""); // for resume
+  //   const [fileKey, setFileKey] = useState(""); // for resume
   const [selectedJob, setSelectedJob] = useState(null); // for job description
+  const [resumeUrl, setResumeUrl] = useState(null); // for resume preview
 
   //   NOTE: This is a very simple navigation click, checks still need to be done to ensure a resume is uploaded and job description
   //         is selected before navigating to the mock interview page. Update when backend is done.
@@ -48,15 +49,16 @@ const DashboardPage = () => {
               <div className="flex">
                 <div className="w-1/2 flex items-center">
                   <ResumeUploader
-                    onUploadComplete={setFileKey}
+                    // onUploadComplete={setFileKey}
+                    onUploadComplete={setResumeUrl}
                     bgColor="var(--color-brown)"
                     textColor="white"
                     bgColorHover="#3b2e23"
                   />
                 </div>
-                <div className="w-1/2 flex items-center h-[400px] border-2 border-gray-300 rounded-lg p-4 bg-white shadow-md justify-center">
-                  {fileKey ? (
-                    <ResumePreviewer fileKey={fileKey} />
+                <div className="w-1/2 flex items-center h-[600px] bg-beige shadow-md justify-center">
+                  {resumeUrl ? (
+                    <ResumePreviewer fileUrl={resumeUrl} />
                   ) : (
                     <p className="text-darkBlue text-xl">
                       Upload a PDF resume to preview.
