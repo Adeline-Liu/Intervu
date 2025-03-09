@@ -1,3 +1,4 @@
+import re
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -75,7 +76,7 @@ class RAG:
             }
             | self.query_prompt 
             | self.llm 
-            | StrOutputParser()  
+            | StrOutputParser() 
         )
 
         return chain.invoke(question)
@@ -100,12 +101,32 @@ class RAG:
             'job_posting_info': job_posting_info,
         })
 
-        
-        # print(response)
+        # Split the response into lines by newlines
         interview_questions_list = response.split("\n")
-        interview_questions_list = [q.strip() for q in interview_questions_list if q.strip()]
-        return interview_questions_list[1:11]
-
+        
+        cleaned_questions = []
+        
+        current_question = ""
+        for line in interview_questions_list:
+            line = line.strip()  
+            
+            if re.match(r"^\d+\.", line):
+                # If we already have a current question, add it to the list
+                if current_question:
+                    cleaned_questions.append(current_question.strip())
+                
+                # Start a new question with this line
+                current_question = line
+            else:
+                # If the line isn't a number, append it to the current question
+                if current_question:
+                    current_question += " " + line
+        
+        # After the loop, add the last question if any
+        if current_question:
+            cleaned_questions.append(current_question.strip())
+        
+        return cleaned_questions
 
     def generate_interview_questions(self, user_id, job_id, resume_store, posting_store):
         resume_infos = []
@@ -118,7 +139,7 @@ class RAG:
 
         # For each job posting predefined questions get info
         for predefined_question in PREDEFINED_QUESTIONS_POSTING:
-            job_info = self.query_posting(job_id, predefined_question, posting_store) 
+            job_info = self.query_posting(job_id, predefined_question, posting_store)  
             job_infos.append(job_info)
         
         interview_questions = self.get_questions(resume_infos, job_infos)

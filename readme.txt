@@ -35,3 +35,14 @@ This contains some critical issues fixed during backend development:
 
 5. Ensure all the required library are installed
     run pip install -r requirements.txt
+
+6. Fix Cors in FastAPI
+    with each request from different origin, usually the request header is checked to see if it includes Cors header to grant permission
+    add the following:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],  # Allow all origins 
+            allow_credentials=True,
+            allow_methods=["*"],  # Allow all HTTP methods
+            allow_headers=["*"],  # Allow all headers
+        )
