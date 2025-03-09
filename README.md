@@ -21,5 +21,3 @@
 🔹 Database: AWS OpenSearch
 
 🔹 Deployment: AWS S3 (Frontend), AWS EC2 (Backend)
-
-🔹 Storage: AWS S3 (Resumes)
