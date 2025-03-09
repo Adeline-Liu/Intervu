@@ -279,7 +279,7 @@ async def get_questions(user_id: str, job_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 # FastAPI endpoint to get related jobs
-@app.get("/get_jobs")
+@app.post("/get_jobs")
 async def get_related_jobs(query: str = Form(...),):
     try:
         jobs = rag.query_related_posting(query, posting_store)
@@ -296,7 +296,7 @@ You are an AI reviewer. Below are some interview questions and answers.
 Provide constructive feedback in the form of a well-written paragraph.
 """
 
-@app.get("/feedback/")
+@app.post("/feedback/")
 async def get_feedback(data: QuestionAnswer):
     try:
         # Extract the question and answer pairs from the incoming data
