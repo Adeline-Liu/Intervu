@@ -188,13 +188,17 @@ const InterviewPage = () => {
   };
 
   const handleSave = () => {
-    const qnaList = questions.map((question, index) => ({
-      question,
-      answer: answers[index],
-    }));
-
-    const jsonData = JSON.stringify(qnaList);
-
+    const response = {};
+  
+    questions.forEach((question, index) => {
+      response[index + 1] = {
+        [`question${index + 1}`]: question,
+        [`answer${index + 1}`]: answers[index],
+      };
+    });
+  
+    const jsonData = JSON.stringify({ response });
+  
     fetch('your-backend-endpoint', {
       method: 'POST',
       headers: {
@@ -209,7 +213,7 @@ const InterviewPage = () => {
       .catch(error => {
         console.error('Error:', error);
       });
-  };
+  };  
 
   return (
     <div>
