@@ -33,14 +33,18 @@ const LoginPage = () => {
 
           <form className="mt-6" role="form">
             <div>
+              <label htmlFor="username" className="sr-only">Username</label>
               <input
+                id="username"
                 type="text"
                 placeholder="Username"
                 className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 mt-3 bg-white"
               />
             </div>
             <div>
+            <label htmlFor="password" className="sr-only">Password</label>
               <input
+                id="password"
                 type="password"
                 placeholder="Password"
                 className="text-2xl w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 mt-3 bg-white"

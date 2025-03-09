@@ -6,11 +6,11 @@ function JobDescriptionSelector({
     setSelectedJob,
     textColor = "black",
 }) {
-  // const [selectedJob, updateSelectedJob] = useState(null);
+  const [selectedJob, updateSelectedJob] = useState(null);
 
   return (
     <div className = "mb-[30px]">
-      {/* <JobDescriptionSearcher setSelectedJob={updateSelectedJob}/> */}
+      <JobDescriptionSearcher setSelectedJob={updateSelectedJob}/>
       <JobDescriptionCreator setSelectedJob={setSelectedJob} textColor = {textColor}/>
     </div>
   );
